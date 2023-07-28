@@ -1,0 +1,36 @@
+---
+- hosts: netcup
+  become: true
+  become_user: root
+  tasks:
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - htop
+          - nload
+          - screen
+        state: latest
+        update_cache: true
+
+    - name: add GPG key
+          apt_key:
+            url: https://download.docker.com/linux/debian/gpg
+            state: present
+
+    - name: add docker repository to apt for debian 
+          apt_repository:
+            repo: deb https://download.docker.com/linux/debian bookworm stable
+            state: present
+
+    - name: install docker
+          apt:
+            state: latest
+            update_cache: yes
+          pkg:
+            - docker-ce
+            - docker-ce-cli
+            - containerd.io
