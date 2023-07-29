@@ -1,0 +1,18 @@
+---
+- hosts: all
+  tasks:
+    - name: make config folder
+      ansible.builtin.file:
+        path: /etc/docker
+        state: directory
+
+    - name: copy config
+      copy:
+        src: docker.json
+        dest: /etc/docker/daemon.json
+
+    - name: reboot docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted
+        enabled: true
